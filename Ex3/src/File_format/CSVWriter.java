@@ -10,17 +10,15 @@ import TheGame.Packman;
 
 public class CSVWriter {
 
-	element2CSV e2CSV;
 	Game game;
+	int id = 0;
 
-
-	public CSVWriter() {
-		e2CSV = new element2CSV();
-		game = new Game();
+	public CSVWriter(Game game) {
+		this.game = game;
 	}
 
 
-	public void writeCSV(String fileName, PrintWriter pw, ArrayList<Packman> packmanList, ArrayList<Fruit> fruitList) {
+	public void writeCSV(String fileName, PrintWriter pw) {
 		//		try {
 		//			pw = new PrintWriter(new File(fileName));
 		//		} 
@@ -45,15 +43,22 @@ public class CSVWriter {
 		sb.append("Radius");
 		sb.append('\n');
 
+
+
+		packman2String(game.getPackmanList(),  sb);
+		fruit2String(game.getFruitList(), sb);
+
 		//System.out.println("what i wanted" + packmanList.get(0));
 
-		for(Packman p : packmanList) {
-			readFromString(e2CSV.packman2String(packmanList), sb);
-		}
-		for(Fruit f : fruitList) {
-			readFromString(e2CSV.fruit2String(fruitList), sb);
-		}
-	//	System.out.println(sb.toString());
+		//		for(int i = 0; i < packmanList.size(); i++) {
+		//			System.out.println("point is: " + packmanList.get(i).getPoint3D().x());
+		//			readFromString(e2CSV.packman2String(packmanList), sb);
+
+		//	}
+		//		for(int i = 0; i < fruitList.size(); i++) {
+		//			readFromString(e2CSV.fruit2String(fruitList), sb);
+		//}
+		//	System.out.println(sb.toString());
 
 		pw.write(sb.toString());
 		pw.close();
@@ -61,27 +66,51 @@ public class CSVWriter {
 
 
 
-	public StringBuilder readFromString(String[] s, StringBuilder sb) {
-		for(int i = 0; i < s.length; i++) {
-			sb.append(s[i]);
-			if(i != s.length - 1) {
-				sb.append(",");
-			}
+//	public StringBuilder readFromString(String[] s, StringBuilder sb) {
+//		for(int i = 0; i < s.length; i++) {
+//			sb.append(s[i]);
+//			if(i != s.length - 1) {
+//				sb.append(",");
+//			}
+//		}
+//		sb.append('\n');
+//		return sb;
+//
+//	}
+
+	public StringBuilder packman2String(ArrayList<Packman> list, StringBuilder sb) {
+		for(Packman p : list) {
+			sb.append("P,");
+			sb.append("" + id + ",");
+			sb.append("" + p.getPoint3D().x() + ",");
+			sb.append("" + p.getPoint3D().y() + ",");
+			sb.append("" + 0 + ",");
+			sb.append("" + 1 + ",");
+			sb.append("" + 1);
+			sb.append('\n');
+			id++;
 		}
-		sb.append('\n');
+
 		return sb;
-
 	}
 
-	public static void main(String[] args){
-		String fileName = "yael.csv";
-		PrintWriter pw = null;
 
-		CSVWriter writer = new CSVWriter();
+	public StringBuilder fruit2String(ArrayList<Fruit> list, StringBuilder sb) {
+		for(Fruit f : list) {
+			sb.append("F,");
+			sb.append("" + id + ",");
+			sb.append("" + f.getPoint3D().x() + ",");
+			sb.append("" + f.getPoint3D().y() + ",");
+			sb.append("" + 0 + ",");
+			sb.append("" + 1);
+			sb.append('\n');
+			id++;
+		}
 
-		//writer.writeCSV(fileName, pw);
-		System.out.println("done!");
+		return sb;
 	}
+
+
 
 }
 

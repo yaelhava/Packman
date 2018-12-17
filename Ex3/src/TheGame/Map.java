@@ -11,8 +11,8 @@ import Geom.Point3D;
 
 public class Map {
 
-	private Point3D startPoint = new Point3D(32.106046, 35.212405);
-	private Point3D endPoint = new Point3D(32.101858, 35.202574);
+	private Point3D startPoint = new Point3D(35.21236,32.10569 );
+	private Point3D endPoint = new Point3D( 35.20238,32.1019);
 	private Pixel startPixel;
 	private Pixel endPixel;
 	private int width,height;
@@ -31,6 +31,15 @@ public class Map {
 		Point3D ratio = normalize(point,startPoint,endPoint);
 		double resultX = Math.abs(ratio.x()*Math.abs(width));
 		double resultY = Math.abs(ratio.y()*Math.abs(height));
+		if(ratio.y()>=0.5) {
+			double fix= height - resultY;
+			resultY= fix;
+		}
+		else {
+			double fix= resultY;
+			resultY= height- fix;
+		}
+		
 		return new Point3D(resultX,resultY);
 	}
 
@@ -38,7 +47,9 @@ public class Map {
 		Point3D ratio = normalize(point,new Point3D(0,0),new Point3D(width,height));
 		double resultX = ratio.x()*Math.abs(endPoint.x()-startPoint.x())+startPoint.x();
 		double resultY = ratio.y()*Math.abs(endPoint.y()-startPoint.y())+startPoint.y();
-		return new Point3D(resultX,resultY);
+		double fix= endPoint.y()- resultY;
+		resultY= startPoint.y()+fix;
+		return new Point3D(resultY,resultX);
 	}
 
 	private Point3D normalize(Point3D point, Point3D startPoint ,Point3D endPoint) {
@@ -46,6 +57,28 @@ public class Map {
 		double yPrecent = (point.y()-startPoint.y())/(endPoint.y()-startPoint.y());
 		return new Point3D(xPrecent,yPrecent);
 	}
+
+
+	public double PixelDistance (Point3D p1, Point3D p2) {
+		Point3D startPixel= gps2Pixel(p1, map.getWidth(), map.getHeight());
+		Point3D endPixel= gps2Pixel(p2, map.getWidth(), map.getHeight());
+
+		MyCoords coords= new MyCoords(0, 0, 0);
+		double dis= coords.distance3d(startPixel, endPixel);
+
+		return dis;
+	}
+
+
+//	public double PixelEngel (Pixel p1, Pixel p2) { //lo lishcoah!!!!!!!!!!!!!!!1
+//			Point3D SP= Pixel2GPS(p1);
+//			Point3D EP= Pixel2GPS(p2);
+//			MyCoords m= new MyCoords(0, 0, 0);
+//			double[] AED= m.azimuth_elevation_dist(SP, EP);
+//			return AED[0];
+//		}
+
+
 
 	public BufferedImage getMap() {
 		return map;

@@ -7,7 +7,7 @@ import GIS.ElementGIS;
 import GIS.LayerGIS;
 import GIS.ProjectGIS;
 import GIS.metaDataGIS;
-import Geom.ElementGeom;
+import Geom.Point3D;
 
 	/**
 	 * this class changes the format file from csv to kml.
@@ -51,7 +51,7 @@ public class Csv2kml {
 			while(itElement.hasNext()) {
 				element = (ElementGIS) itElement.next();
 				metaDataGIS metaDataElement = (metaDataGIS) element.getData();
-				ElementGeom geom = (ElementGeom) element.getGeom();
+				Point3D geom = (Point3D) element.getGeom();
 				
 				String kmlElement = "<Placemark>\n" +
 						"<name>" + metaDataElement.getSSID() +"</name>\n" +
@@ -63,7 +63,7 @@ public class Csv2kml {
 						"Channel: " + metaDataElement.getChannel() + "\n" +
 						"]]></description>\n" +
 						"<Point>\n" +
-						"<coordinates>" + geom.getY() + ", " + geom.getX() + "</coordinates>" +
+						"<coordinates>" + geom.y() + ", " + geom.x() + "</coordinates>" +
 						"</Point>\n" +
 						"<TimeStamp>\n" + 
 						"<when>" + metaDataElement.FirstSeen(metaDataElement.getFirstSeen()) + "</when>" + 

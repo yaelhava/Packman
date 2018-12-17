@@ -1,17 +1,15 @@
 package TheGame;
 
-import Geom.ElementGeom;
 import Geom.Point3D;
 
 public class Packman {
 
-	private ElementGeom point;
 	private PackmanMetaData data;
 	private Point3D point3D;
 	//private Pixel pixel;
 	
-	public Packman(ElementGeom point, PackmanMetaData data) {
-		this.point = point;
+	public Packman(Point3D point, PackmanMetaData data) {
+		this.point3D = point;
 		this.data = data;
 	}
 	
@@ -20,12 +18,6 @@ public class Packman {
 	//	this.pixel = pixel;
 	}
 	
-	
-
-	public ElementGeom getPoint() {
-		return point;
-	}
-
 
 	public PackmanMetaData getPackmanData() {
 		return data;
@@ -33,6 +25,10 @@ public class Packman {
 
 	public Point3D getPoint3D() {
 		return point3D;
+	}
+
+	public void setPoint3D(Point3D point3d) {
+		point3D = point3d;
 	}
 	
 //	public Pixel getPixel() {

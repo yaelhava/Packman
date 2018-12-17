@@ -1,20 +1,21 @@
 package File_format;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.text.html.HTMLDocument.Iterator;
 
-import Geom.ElementGeom;
+import Geom.Point3D;
 import TheGame.Fruit;
 import TheGame.FruitMetaData;
 import TheGame.Game;
 import TheGame.Packman;
 import TheGame.PackmanMetaData;
 
-	/**
-	 * this class takes a csv file and inserts every line to an element object.
-	 * @author yael hava and naama hartuv
-	 */
+/**
+ * this class takes a csv file and inserts every line to an element object.
+ * @author yael hava and naama hartuv
+ */
 
 public class CSV2elements 
 {
@@ -25,7 +26,7 @@ public class CSV2elements
 	 * constructor
 	 * @param path - the given cvs file's path
 	 */
-	
+
 	public CSV2elements(String path) {
 		this.path = path;
 		game = new Game();
@@ -35,7 +36,7 @@ public class CSV2elements
 	/**
 	 * create an array list with elements and add any element to a layer.
 	 */
-	
+
 	private void toElem() {
 		CSVreader r = new CSVreader(path);
 		ArrayList<String[]> arr = r.CSVReader();
@@ -55,17 +56,17 @@ public class CSV2elements
 	 * @param arr - the line
 	 * @return e - the element with the data and the coordinate
 	 */
-	
+
 	private Packman toPackmanElem(String arr[]) {
 		PackmanMetaData data = new PackmanMetaData(arr);
-		ElementGeom point = new ElementGeom(arr);
+		Point3D point = new Point3D(arr);
 		Packman p = new Packman(point, data);
 		return p;
 	}
-	
+
 	private Fruit toFruitElem(String arr[]) {
 		FruitMetaData data = new FruitMetaData(arr);
-		ElementGeom point = new ElementGeom(arr);
+		Point3D point = new Point3D(arr);
 		Fruit f = new Fruit(point, data);
 		return f;
 	}
@@ -74,7 +75,7 @@ public class CSV2elements
 	 * getter for the layer created at this class
 	 * @return l - the layer
 	 */
-	
+
 	public Game getGame() {
 		return game;
 	}

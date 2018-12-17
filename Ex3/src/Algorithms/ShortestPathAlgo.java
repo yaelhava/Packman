@@ -3,47 +3,35 @@ package Algorithms;
 import java.util.ArrayList;
 
 import TheGame.Fruit;
+import TheGame.Game;
 import TheGame.Packman;
 import Geom.Point3D;
 
 public class ShortestPathAlgo  {
 
+	private Game game;
 
-	private ArrayList<Fruit> fruitList;
-	private ArrayList<Packman> packmanList;
-	
-	
-	public ArrayList<Fruit> getFruitList() {
-		return fruitList;
+	public ShortestPathAlgo(Game game) {
+		this.game = game;
 	}
-	public ArrayList<Packman> getPackmanList() {
-		return packmanList;
-	}
-	
-	public ShortestPathAlgo(ArrayList<Packman> p, ArrayList<Fruit> f ) {
-		double [] dis= new double[ p.size()];
-		int packman=0;
-		int count=0;
-		for( Fruit F: fruitList) {
-			double xF= F.getPoint().getX();
-			double yF= F.getPoint().getY();
-			Point3D pointF= new Point3D(xF,yF);
-			for(Packman P: packmanList) {
-				double min= dis[0];
-				double xP= P.getPoint().getX();
-				double yP= P.getPoint().getY();
-				Point3D pointP= new Point3D(xP,yP);
-				double FPdis= pointP.distance3D(pointF);
-				dis[count]= FPdis;
-				if(min>FPdis) {
-					min= dis[count];
-					packman= count;
-				}
-				count++;
+
+	public void ShortestPath() {
+		while(game.getFruitList() != null) {
+			Path fastestPaths = new Path();
+
+			for(Packman p : game.getPackmanList()) {
+				Path path = new Path(p, game.getFruitList());
+				path.BuildPath();
+				fastestPaths.getPackmanPrio().add(path.next());
 			}
-			//להכניס חלק שהפאקמן הולך לאכול את הפרי
-			//להכניס שהפאקמן מקבל נק מיקום חדשה של הפרי
+			//set the point of the packman to the point of the fruit
+			fastestPaths.next().getPackman().setPoint3D(fastestPaths.next().getFruit().getPoint3D());
+			//erase the fruit that got eatten from the list
+			game.getFruitList().remove(fastestPaths.next().getFruit());	
 		}
 	}
-	
+
+
+
+
 }

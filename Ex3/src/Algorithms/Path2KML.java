@@ -1,4 +1,4 @@
-package File_format;
+package Algorithms;
 
 public class Path2KML {
 

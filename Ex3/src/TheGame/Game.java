@@ -1,7 +1,9 @@
 package TheGame;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import File_format.CSV2elements;
+import File_format.CSVWriter;
 
 
 public class Game {
@@ -10,7 +12,8 @@ public class Game {
 	private ArrayList<Packman> packmanList;
 	private Packman packman;
 	private Fruit fruit;
-	private CSV2elements c;
+	private CSVWriter csvWriter;
+	CSV2elements c;
 
 	
 	public ArrayList<Fruit> getFruitList() {
@@ -46,15 +49,10 @@ public class Game {
 	}
 
 
-	public void toCsvFile(Object o) {
-		if(o == packman) {
-			
-		}
-		else if(o == fruit) {
-			
-		}
-	}
-
+//	public void exportCsvFile(String fileName, PrintWriter pw) {
+//        csvWriter.writeCSV(fileName, pw, getPackmanList(), getFruitList());
+//
+//	}
 
 
 

@@ -1,10 +1,6 @@
 package GUI;
 
 import java.awt.Graphics;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -22,33 +18,25 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JButton;
-import java.awt.BorderLayout;
-import java.awt.FileDialog;
-import java.awt.FlowLayout;
 
-import javax.swing.JPanel;
+import java.awt.FileDialog;
+
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import File_format.CSV2elements;
 import File_format.CSVWriter;
-import File_format.element2CSV;
-import Geom.ElementGeom;
 import Geom.Point3D;
 import TheGame.Fruit;
 import TheGame.Game;
 import TheGame.Map;
 import TheGame.Packman;
 
-import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.ActionEvent;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 
 
 public class MyFrame extends JFrame implements MouseListener, MenuListener, ActionListener {
@@ -62,10 +50,9 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 	ArrayList<BufferedImage> imageList = new ArrayList<BufferedImage>();
 	int type;
 	Map map ;
-	element2CSV e2csv;
 	CSVWriter csvWriter;
-	
-	
+
+
 	public MyFrame() 
 	{
 		initGUI();		
@@ -76,10 +63,12 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 	private void initGUI() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		e2csv = new element2CSV();
-		csvWriter = new CSVWriter();
+		
+		map = new Map( "Ariel1.png");
+		game = new Game();
+		csvWriter = new CSVWriter(game);
 		menuBar = new JMenuBar();
+
 
 		fileMenu = new JMenu("File"); 
 		save = new JMenuItem("Save");
@@ -153,14 +142,14 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 		});
 
 		save.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				saveFile();
 			}
 		});
 		clear.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				game.getPackmanList().clear();
@@ -168,22 +157,21 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 				repaint();
 			}
 		});
-		
+
 		exit.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
-				
+
 			}
 		});
-//		Point3D start = new Point3D(32.106046, 35.212405);
-//		Point3D end = new Point3D(32.101858, 35.202574);
+		//		Point3D start = new Point3D(32.106046, 35.212405);
+		//		Point3D end = new Point3D(32.101858, 35.202574);
 
 		setJMenuBar(menuBar);
 		//menuBar.setVisible(true);
-		map = new Map( "Ariel1.png");
-		game = new Game();
+
 	}
 
 
@@ -195,10 +183,12 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 		g.drawImage(map.getMap(), 0, 0,getWidth(),getHeight(), this);
 		setJMenuBar(menuBar);
 
-		
+
 		if(game.getPackmanList() != null)  {
 			for(Packman p : game.getPackmanList()) {
 				Point3D temp = map.gps2Pixel(p.getPoint3D(), getWidth(), getHeight());
+				//		System.out.println("temp: " +temp);
+
 				g.drawImage(packmanImage,(int)temp.x(), (int)temp.y(), 30, 40, this);
 
 			}		
@@ -207,6 +197,8 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 		if(game.getFruitList() != null) {
 			for(Fruit f : game.getFruitList()) {
 				Point3D temp = map.gps2Pixel(f.getPoint3D(), getWidth(), getHeight());
+				//		System.out.println("temp: " +temp);
+
 				g.drawImage(imageList.get((int)(Math.random()*3)),(int)temp.x(), (int)temp.y(), 30, 40, this);
 			}
 		}
@@ -226,18 +218,17 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 	public void mouseClicked(MouseEvent arg) {
 
 		//map.pixel2gps(new Point3D(arg.getPoint().getX(), arg.getPoint().getY() ), getWidth(), getHeight());
-		
+
 		if(type == 1) {
-			Point3D newPoint = map.pixel2gps(new Point3D(arg.getPoint().getX(),
-					arg.getPoint().getY() ), getWidth(), getHeight());
+			Point3D newPoint = map.pixel2gps(new Point3D(arg.getX(), arg.getY() ), getWidth(), getHeight());
 			Fruit newFruit = new Fruit(newPoint);
+			//System.out.println("newPoint: " +newPoint);
 			game.getFruitList().add(newFruit);
 			repaint();
 		}
 
 		if(type == 2) {
-			Point3D newPoint = map.pixel2gps(new Point3D(arg.getPoint().getX(),
-					arg.getPoint().getY() ), getWidth(), getHeight());
+			Point3D newPoint = map.pixel2gps(new Point3D(arg.getX(), arg.getY()), getWidth(), getHeight());
 			Packman newPackman = new Packman(newPoint);
 			game.getPackmanList().add(newPackman);
 			repaint();
@@ -257,25 +248,21 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		System.out.println("mouse entered");
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -341,11 +328,14 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 					System.out.println(line);		//terem hevanti ma ose
 				}
 			}
+				CSV2elements c = new CSV2elements(dir + fileName);
+				
+
 			bReader.close();
 			fileReader.close();
 		} catch (IOException ex) {
-//			System.out.print("Error reading file " + ex);
-//			System.exit(2);
+			//			System.out.print("Error reading file " + ex);
+			//			System.exit(2);
 		}
 	}
 
@@ -363,20 +353,20 @@ public class MyFrame extends JFrame implements MouseListener, MenuListener, Acti
 		String dir = fileDialog.getDirectory();
 		String fileName = fileDialog.getFile();
 		try {
-            FileWriter fileWriter = new FileWriter(dir + fileName);
-            PrintWriter pWriter = new PrintWriter(fileWriter);
-    	//	System.out.println("what i wanted1" + game.getFruitList().get(0));
+			FileWriter fileWriter = new FileWriter(dir + fileName);
+			PrintWriter pWriter = new PrintWriter(fileWriter);
+			//	System.out.println("what i wanted1" + game.getFruitList().get(0));
+			//    game.exportCsvFile(fileName, pWriter);
+			csvWriter.writeCSV(fileName, pWriter);
+			fileWriter.close();
 
-            csvWriter.writeCSV(fileName, pWriter, game.getPackmanList(), game.getFruitList());
-            fileWriter.close();
+		} catch (IOException ex) {
+			System.out.print("Error writing file  " + ex);
+		}
 
-        } catch (IOException ex) {
-            System.out.print("Error writing file  " + ex);
-        }
-		
 
 	}
-	
-	
+
+
 }
 
